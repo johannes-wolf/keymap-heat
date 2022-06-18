@@ -25,20 +25,40 @@ let layout_qwertz = {
   }
 }
 
+let layout_dvorac = {
+  name: 'DVORAC',
+  key_tab: {
+    'default': [
+      ['ò', '1', '2', '3', '4', '5',     /**/ '6', '7', '8', '9', '0', '[', ']', '←'],
+      ['tab', '\'', ',', '.', 'p', 'y',  /**/ 'f', 'g', 'c', 'r', 'l', '/', '='],
+      ['caps', 'a', 'o', 'e', 'u', 'i',  /**/ 'd', 'h', 't', 'n', 's', '-', '\\'],
+      ['shift', ';', 'q', 'j', 'k',      /**/ 'x', 'b', 'm', 'w', 'v', 'z', 'shift'],
+      ['ctrl', 'super', 'alt', ' ',                                   'alt', 'ctrl']
+    ],
+    'shift': [
+      ['~', '!', '@', '#', '$', '%',     /**/ '^', '&', '*', '(', ')', '{', '}', '←'],
+      ['tab', '"', '<', '>', 'P', 'Y',   /**/ 'F', 'G', 'C', 'R', 'L', '?', '+'],
+      ['caps', 'A', 'O', 'E', 'U', 'I',  /**/ 'D', 'H', 'T', 'N', 'S', '_', '\\'],
+      ['shift', ':', 'Q', 'J', 'K',      /**/ 'X', 'B', 'M', 'W', 'V', 'Z', 'shift'],
+      ['ctrl', 'super', 'alt', ' ',                                   'alt', 'ctrl']
+    ]
+  }
+}
+
 let layout_qwerty = {
   name: 'QWERTY',
   key_tab: {
     'default': [
       ['°', '1', '2', '3', '4', '5',     /**/ '6', '7', '8', '9', '0', '-', '=', '←'],
-      ['tab', 'q', 'w', 'e', 'r', 't',   /**/ 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'],
-      ['caps', 'a', 's', 'd', 'f', 'g',  /**/ 'h', 'j', 'k', 'l', ';', '\''],
+      ['tab', 'q', 'w', 'e', 'r', 't',   /**/ 'y', 'u', 'i', 'o', 'p', '[', ']'],
+      ['caps', 'a', 's', 'd', 'f', 'g',  /**/ 'h', 'j', 'k', 'l', ';', '\'', '\\'],
       ['shift', 'z', 'x', 'c', 'v',      /**/ 'b', 'n', 'm', ',', '.', '_', 'shift'],
       ['ctrl', 'super', 'alt', ' ',                                   'alt', 'ctrl']
     ],
     'shift': [
       ['^', '!', '@', '#', '$', '%',     /**/ '^', '&', '*', '(', ')', '_', '+', '←'],
-      ['tab', 'Q', 'W', 'E', 'R', 'T',   /**/ 'Y', 'U', 'I', 'O', 'P', '{', '}', '|'],
-      ['caps', 'A', 'S', 'D', 'F', 'G',  /**/ 'H', 'J', 'K', 'L', ':', '"'],
+      ['tab', 'Q', 'W', 'E', 'R', 'T',   /**/ 'Y', 'U', 'I', 'O', 'P', '{', '}'],
+      ['caps', 'A', 'S', 'D', 'F', 'G',  /**/ 'H', 'J', 'K', 'L', ':', '"', '|'],
       ['shift', 'Z', 'X', 'C', 'V',      /**/ 'B', 'N', 'M', '<', '>', '?', 'shift'],
       ['ctrl', 'super', 'alt', ' ',                                   'alt', 'ctrl']
     ],
@@ -125,6 +145,7 @@ let layout_neo_qwertz = {
 const layouts = {
   'qwertz': layout_qwertz,
   'qwerty': layout_qwerty,
+  'dvorac': layout_dvorac,
   'neo': layout_neo,
   'neo_bone': layout_neo_bone,
   'neo_qwertz': layout_neo_qwertz
