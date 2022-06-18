@@ -1,3 +1,5 @@
+![Example of a keyboard heatmap](https://raw.githubusercontent.com/johannes-wolf/keymap-heat/master/example.png)
+
 ### Try It
 https://johannes-wolf.github.io/keymap-heat/
 
