@@ -1,0 +1,143 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Keyboard Heatmap</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="keyboard.js"></script>
+        <script type="text/javascript">
+         function generate_heatmaps(text)
+         {
+             let node = document.getElementById('kbd-container')
+             for (let child of node.children) {
+                 child.heatmap = make_heatmap_for(child.layout, text)
+             }
+         }
+
+         function analyze_string(text) {
+             window.setTimeout(() => {
+                 console.log("Generating heatmap")
+                 generate_heatmaps(text)
+                 console.log("Drawing views")
+                 update_kbds()
+             }, 0)
+         }
+
+         function analyze_page(url)
+         {
+             let request = new XMLHttpRequest();
+             request.open('GET', url)
+             request.onreadystatechange = function() {
+                 if (request.status == 0 ||
+                     request.status >= 200 && request.status <= 400) {
+                     analyze_string(request.responseText)
+                 }
+             };
+             request.send(null);
+         }
+
+         function update_kbds()
+         {
+             let node = document.getElementById('kbd-container')
+             for (let child of node.children) {
+                let ctx = child.getContext('2d')
+                if (ctx) {
+                    ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight)
+                    draw_keyboard(ctx, child.layout, child.mod, child.heatmap)
+                }
+             }
+         }
+
+         function toggle_kbd(name)
+         {
+             let node = document.getElementById('canvas-' + name)
+             if (!node) {
+                 let ratio = 1000/340
+
+                 node = document.createElement('canvas')
+                 node.id = 'canvas-' + name
+                 node.layout = layouts[name]
+                 node.modidx = 0
+                 node.mod = 'default'
+                 node.onclick = (event) => {
+                     let self = event.target
+                     self.modidx += 1
+                     if (self.modidx >= Object.entries(self.layout.key_tab).length)
+                         self.modidx = 0
+                     self.mod = Object.entries(self.layout.key_tab)[self.modidx][0]
+                     update_kbds()
+                 }
+
+                 node.height = 300
+                 node.width = ratio * node.height
+                 document.getElementById('kbd-container').appendChild(node)
+             } else {
+                 node.parentNode.removeChild(node)
+             }
+
+             update_kbds()
+         }
+        </script>
+        <style type="text/css" media="screen">
+         #toolbar {
+             display: block;
+             padding: 10px 0;
+             user-select: none;
+             margin: 0;
+         }
+
+         #toolbar li {
+             display: inline-block;
+             padding: 12px;
+             font-size: 22px;
+         }
+
+         #toolbar li.link:hover {
+             background: rgb(240, 100, 100);
+             cursor: pointer;
+         }
+
+         #kbd-container {
+             text-align: center;
+         }
+
+         .heat {
+             height: 15px;
+             width: 100%;
+             background: linear-gradient(90deg, hsl(240, 100%, 70%), hsl(120, 100%, 70%), hsl(0, 100%, 70%));
+             margin-top: 5px;
+             margin-bottom: 15px;
+         }
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">
+            You are using an <strong>outdated</strong> browser. Please
+            <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+            your experience.
+            </p>
+        <![endif]-->
+
+        <ul id="toolbar">
+            <li class="link" onclick="toggle_kbd('qwertz')">+ QWERTZ</li>
+            <li class="link" onclick="toggle_kbd('qwerty')">+ QWERTY</li>
+            <li class="link" onclick="toggle_kbd('neo')">+ NEO2</li>
+            <li class="link" onclick="toggle_kbd('neo_bone')">+ NEO BONE</li>
+            <li class="link" onclick="toggle_kbd('neo_qwertz')">+ NEO QWERTZ</li>
+            <li>|</li>
+            <li class="link" onclick="analyze_page('https://raw.githubusercontent.com/martinth/mobverdb/master/faust.txt')">Goethe</li>
+            <li class="link" onclick="analyze_page('https://raw.githubusercontent.com/brunoklein99/deep-learning-notes/master/shakespeare.txt')">Shakespeare</li>
+            <li class="link" onclick="analyze_page('https://raw.githubusercontent.com/johannes-wolf/rpnspire/main/rpn.lua')">LUA</li>
+            <li class="link" onclick="analyze_string(document.documentElement.innerHTML)">HTML</li>
+            <li class="link" onclick="analyze_page('https://raw.githubusercontent.com/torvalds/linux/master/drivers/acpi/button.c')">C</li>
+            <li class="link" onclick="analyze_string(window.prompt('Text'))">Custom</li>
+        </ul>
+        <div class="heat">
+
+        </div>
+        <div id="kbd-container">
+        </div>
+    </body>
+</html>
