@@ -83,15 +83,15 @@ let layout_neo = {
         ['ctrl', 'super', 'alt', ' ',                                     'mod4', 'ctrl']
     ],
     'shift': [
-        ['ô', '°', '§', 'ℓ', '»', '«',        /**/ '$', '€', '„', '“', '”', '—', 'ò', '←'], // TODO ACCENTS
-        ['tab', 'X', 'V', 'L', 'C', 'W',      /**/ 'K', 'H', 'G', 'F', 'Q', 'ß', "ó"], // TODO ACCENTS
+        ['ô', '°', '§', 'ℓ', '»', '«',        /**/ '$', '€', '„', '“', '”', '—', 'ò', '←'],
+        ['tab', 'X', 'V', 'L', 'C', 'W',      /**/ 'K', 'H', 'G', 'F', 'Q', 'ß', "ó"],
         ['mod3', 'U', 'I', 'A', 'E', 'O',     /**/ 'S', 'N', 'R', 'T', 'D', 'Y', 'mod3'],
         ['shift', 'mod4', 'Ü', 'Ö', 'Ä', 'P', /**/ 'Z', 'B', 'M', '–', '•', 'J', 'shift'],
         ['ctrl', 'super', 'alt', ' ',                                     'mod4', 'ctrl']
     ],
     'mod3': [
-        ['',  '¹', '²', '³', '›', '‹',             /**/ '¢', '¥', '‚', '‘', '’', '',  '', '←'], // TODO ACCENTS
-        ['tab', '…', '_', '[', ']', '^',           /**/ '!', '<', '>', '=', '&', "ſ", 'ø'], // TODO ACCENTS
+        ['',  '¹', '²', '³', '›', '‹',             /**/ '¢', '¥', '‚', '‘', '’', '',  '', '←'],
+        ['tab', '…', '_', '[', ']', '^',           /**/ '!', '<', '>', '=', '&', "ſ", 'ø'],
         ['mod3', '\\', '/', '{', '}', '*',         /**/ '?', '(', ')', '-', ':', '@', 'mod3'],
         ['shift', 'mod4', '#', '$', '|', '~', '`', /**/ '+', '%', '"', '\'', ';', 'shift'],
         ['ctrl', 'super', 'alt', ' ',                                     'mod4', 'ctrl']
@@ -110,7 +110,7 @@ let layout_neo_bone = {
         ['ctrl', 'super', 'alt', ' ',                                     'mod4', 'ctrl']
     ],
     'shift': [
-        ['ô', '°', '§', 'ℓ', '»', '«',        /**/ '$', '€', '„', '“', '”', '—', 'ò', '←'], // TODO ACCENTS
+        ['ô', '°', '§', 'ℓ', '»', '«',        /**/ '$', '€', '„', '“', '”', '—', 'ò', '←'],
         ['tab', 'J', 'D', 'U', 'A', 'X',      /**/ 'P', 'H', 'L', 'M', 'W', 'ß', "ó"],
         ['mod3', 'C', 'T', 'I', 'E', 'O',     /**/ 'B', 'N', 'R', 'S', 'G', 'Q', 'mod3'],
         ['shift', 'mod4', 'F', 'V', 'Ü', 'Ä', /**/ 'Ö', 'Y', 'Z', ',', '.', 'K', 'shift'],
@@ -131,7 +131,7 @@ let layout_neo_qwertz = {
       ['ctrl', 'super', 'alt', ' ',                                   'mod4', 'ctrl']
     ],
     'shift': [
-      ['¸', '°', '§', 'ℓ', '»', '«',        /**/ '$', '€', '„', '“', '”', '—', 'ò', '←'], // TODO ACCENTS
+      ['¸', '°', '§', 'ℓ', '»', '«',        /**/ '$', '€', '„', '“', '”', '—', 'ò', '←'],
       ['tab', 'Q', 'W', 'E', 'R', 'T',   /**/ 'Z', 'U', 'I', 'O', 'P', 'Ü', 'õ'],
       ['caps', 'A', 'S', 'D', 'F', 'G',  /**/ 'H', 'J', 'K', 'L', 'Ö', 'Ä', 'mod3'],
       ['shift', 'mod4', 'Y', 'X', 'C', 'V', /**/ 'B', 'N', 'M', '-', '•', '–', 'shift'],
@@ -207,9 +207,21 @@ function find_keys_for(layout, target)
   return chain
 }
 
+/**
+ * This key badness is totaly made up.
+ * I have rated the various finger movements I have to do
+ * to reach certain keys from the home position.
+ */
+const key_badness_default = 25
+const key_badness = [
+  [100, 90, 80, 70, 50, 60, /**/ 60, 50, 60, 70, 80, 90, 100, 100],
+  [50,  40, 30, 20, 10, 15, /**/ 15, 10, 20, 30, 40, 40],
+  [30,  20, 10,  5,  5, 10, /**/ 10,  5,  5, 10, 20, 30],
+  [50,  50, 30, 20, 10, 15, /**/ 15, 10, 20, 30, 40, 50],
+  [100, 125, 150,         5,              150, 125]
+]
 
-let default_key_width = [
-  //[1.5, 1, 1, 1, 1, , 1, 1, 1, 1, 1, 1, 1, 1.5], /* Esc + F-Keys */
+const default_key_width = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2    ],
   [1.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], ///
   [2,   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ], //
@@ -349,6 +361,7 @@ function draw_keyboard(ctx, layout, mod, heatmap)
 
 function make_heatmap_for(layout, text)
 {
+  let badness = 0
   let hits = {} // Hits per key
   let high = 0  // Highest key hit
   for (const char of text) {
@@ -364,7 +377,10 @@ function make_heatmap_for(layout, text)
   let heatmap = {}
   for (const [key, count] of Object.entries(hits)) {
     heatmap[key] = count / high
+
+    const [key_row, key_col] = key.split(',')
+    badness += key_badness[key_row][key_col] || key_badness_default
   }
 
-  return {heatmap: heatmap, hitmap: hits}
+  return {heatmap: heatmap, hitmap: hits, badness: badness}
 }

@@ -12,6 +12,7 @@
              let node = document.getElementById('kbd-container')
              for (let child of node.children) {
                  child.heatmap = make_heatmap_for(child.layout, text)
+                 console.log(`${child.layout.name} badness = ${child.heatmap.badness}`)
              }
          }
 
