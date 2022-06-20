@@ -361,15 +361,55 @@ function draw_keyboard(ctx, layout, mod, heatmap)
 
 function make_heatmap_for(layout, text)
 {
-  let badness = 0
+  let hits_left = 0
+  let hits_right = 0
+  let hits_per_finger = [0, 0, 0, 0, 0]
+  let hits_total = 0
+
   let hits = {} // Hits per key
   let high = 0  // Highest key hit
   for (const char of text) {
     let keys = find_keys_for(layout, char)
     if (keys && keys.length) {
+      hits_total += keys.length
       for (const key of keys) {
         hits[[key.row, key.column]] = hits[[key.row, key.column]] + 1 || 1
         high = Math.max(high, hits[[key.row, key.column]])
+
+        /* Count left/right hits */
+        if (key.key != ' ' && key.key != 'shift') {
+          if (key.column <= 5)
+            ++hits_left
+          else
+            ++hits_right
+        }
+
+        /* Count hits per finger */
+        if (key.key == ' ')
+          ++hits_per_finger[0]
+        else if (key.row == 4) {
+          let finger = (key.column == 0 ? 4 :
+                        key.column <= 2 ? 3 :
+                        0)
+
+          ++hits_per_finger[finger]
+        } else {
+          let row_offset = (key.row == 0 ? 1 :
+                            key.row == 3 ? 1 :
+                            0)
+          let finger = (/*Left hand*/
+                        key.column <= 1+row_offset ? 4 :
+                        key.column == 2+row_offset ? 3 :
+                        key.column == 3+row_offset ? 2 :
+                        key.column <= 5+row_offset ? 1 :
+                        /* Right hand */
+                        key.column <= 7+row_offset ? 1 :
+                        key.column == 8+row_offset ? 2 :
+                        key.column == 9+row_offset ? 3 :
+                        4)
+
+          ++hits_per_finger[finger]
+        }
       }
     }
   }
@@ -377,10 +417,21 @@ function make_heatmap_for(layout, text)
   let heatmap = {}
   for (const [key, count] of Object.entries(hits)) {
     heatmap[key] = count / high
-
-    const [key_row, key_col] = key.split(',')
-    badness += key_badness[key_row][key_col] || key_badness_default
   }
 
-  return {heatmap: heatmap, hitmap: hits, badness: badness}
+  return {
+    heatmap: heatmap,
+    hitmap: hits,
+    hand: {
+      left: hits_left / (hits_left + hits_right),
+      right: hits_right / (hits_left + hits_right),
+    },
+    finger: {
+      'thumb': hits_per_finger[0] / hits_total,
+      'index': hits_per_finger[1] / hits_total,
+      'mid': hits_per_finger[2] / hits_total,
+      'ring': hits_per_finger[3] / hits_total,
+      'pinky': hits_per_finger[4] / hits_total,
+    }
+  }
 }
