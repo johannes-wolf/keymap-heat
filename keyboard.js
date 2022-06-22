@@ -120,6 +120,26 @@ let layout_neo_bone = {
   }
 }
 
+let layout_colemak = {
+  name: 'COLEMAK',
+  key_tab: {
+    'default': [
+        ['~', '1', '2', '3', '4', '5',        /**/ '6', '7', '8', '9', '0', '-', '=', '←'],
+        ['tab', 'q', 'w', 'f', 'p', 'g',      /**/ 'j', 'l', 'u', 'y', ';', '[', "]"],
+        ['caps', 'a', 'r', 's', 't', 'd',     /**/ 'h', 'n', 'e', 'i', 'o', '\'', '\\'],
+        ['shift', 'z', 'x', 'c', 'v', 'b',    /**/ 'k', 'm', '.', ',', '/', '', 'shift'],
+        ['ctrl', 'super', 'alt', ' ',                                     'mod4', 'ctrl']
+    ],
+    'shift': [
+        ['`', '!', '"', '§', '$', '%',        /**/ '&', '/', '(', ')', '=', '_', '+', '←'],
+        ['tab', 'Q', 'W', 'F', 'P', 'G',      /**/ 'J', 'L', 'U', 'Y', ':', '{', "}"],
+        ['caps', 'A', 'R', 'S', 'T', 'D',     /**/ 'H', 'N', 'E', 'I', 'O', '"', '|'],
+        ['shift', 'Z', 'X', 'C', 'V', 'B',    /**/ 'K', 'M', '<', '>', '?', '', 'shift'],
+        ['ctrl', 'super', 'alt', ' ',                                     'mod4', 'ctrl']
+    ]
+  }
+}
+
 let layout_neo_qwertz = {
   name: 'NEO QWERTZ',
   key_tab: {
@@ -141,6 +161,26 @@ let layout_neo_qwertz = {
   }
 }
 
+let layout_3_sprachen = { /* Could not find much info about this layout */
+  name: '3-SPRACHEN',
+  key_tab: {
+    'default': [
+      ['', '1', '2', '3', '4', '5',         /**/ '6', '7', '8', '9', '0', 'ß', '', '←'],
+      ['tab', 'x', 'q', 'h', 'w', 'z',      /**/ 'c', 'd', 't', 'b', 'p', 'j', ''],
+      ['caps', 'u', 'i', 'a', 'e', 'o',     /**/ 'l', 'r', 'n', 's', 'f', 'v', 'caps'],
+      ['shift', 'mod4', 'ö', 'ä', 'ü', 'y', /**/ 'k', 'g', 'm', ',', '.', '-', 'shift'],
+      ['ctrl', 'super', 'alt', ' ',                                   'mod4', 'ctrl']
+    ],
+    'shift': [
+      ['', '1', '2', '3', '4', '5',         /**/ '6', '7', '8', '9', '0', 'ß', '', '←'],
+      ['tab', 'X', 'Q', 'H', 'W', 'Z',      /**/ 'C', 'D', 'T', 'B', 'P', 'J', ''],
+      ['caps', 'U', 'I', 'A', 'E', 'O',     /**/ 'L', 'R', 'N', 'S', 'F', 'V', 'caps'],
+      ['shift', 'mod4', ';', '&', 'é', 'Y', /**/ 'K', 'G', 'M', '?', '!', '\'', 'shift'],
+      ['ctrl', 'super', 'alt', ' ',                                   'mod4', 'ctrl']
+    ]
+  }
+}
+
 
 const layouts = {
   'qwertz': layout_qwertz,
@@ -148,7 +188,9 @@ const layouts = {
   'dvorac': layout_dvorac,
   'neo': layout_neo,
   'neo_bone': layout_neo_bone,
-  'neo_qwertz': layout_neo_qwertz
+  'neo_qwertz': layout_neo_qwertz,
+  '3_sprachen': layout_3_sprachen,
+  'colemak': layout_colemak,
 }
 
 function find_keys_for(layout, target)
